@@ -49,5 +49,26 @@ namespace SportsbookAPI.Web.Controllers
                 return StatusCode(400, "Too much event in the system, please delete some.");
             }
         }
+
+        /// <summary>
+        /// Deletes event
+        /// </summary>
+        /// <param name="id">Identifier of event to delete</param>
+        /// <returns></returns>
+        [HttpDelete]
+        [ProducesResponseType(typeof(int), 204)]
+        [ProducesResponseType(typeof(string), 400)]
+        public ActionResult Delete(int id)
+        {
+            try
+            {
+                _eventsRepository.Delete(id);
+                return NoContent();
+            }
+            catch (OperationCanceledException)
+            {
+                return StatusCode(400, $"No event in the system with id {id}.");
+            }
+        }
     }
 }

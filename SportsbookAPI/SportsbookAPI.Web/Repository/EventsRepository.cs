@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using SportsbookAPI.Web.Models;
 
 namespace SportsbookAPI.Web.Repository
@@ -46,6 +47,17 @@ namespace SportsbookAPI.Web.Repository
             events.Add(e);
 
             return e.Id;
+        }
+
+        public void Delete(int id)
+        {
+            var evt = events.SingleOrDefault(e => e.Id == id);
+            if (evt == null)
+            {
+                throw new OperationCanceledException();
+            }
+
+            events.Remove(evt);
         }
     }
 }
