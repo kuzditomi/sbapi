@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SportsbookAPI.Web.Models;
 using SportsbookAPI.Web.Repository;
@@ -7,6 +8,7 @@ using SportsbookAPI.Web.Repository;
 namespace SportsbookAPI.Web.Controllers
 {
     [Route("api/events")]
+    [Authorize]
     [ApiController]
     public class EventsController : ControllerBase
     {
@@ -21,6 +23,7 @@ namespace SportsbookAPI.Web.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
+        [Route("")]
         [ProducesResponseType(typeof(IEnumerable<SportsbookEvent>), 200)]
         public ActionResult Get()
         {
@@ -35,6 +38,7 @@ namespace SportsbookAPI.Web.Controllers
         /// <param name="evt"></param>
         /// <returns></returns>
         [HttpPost]
+        [Route("")]
         [ProducesResponseType(typeof(int), 204)]
         [ProducesResponseType(typeof(string), 400)]
         public ActionResult Create(SportsbookEventCreation evt)
@@ -56,6 +60,7 @@ namespace SportsbookAPI.Web.Controllers
         /// <param name="id">Identifier of event to delete</param>
         /// <returns></returns>
         [HttpDelete]
+        [Route("{id}")]
         [ProducesResponseType(typeof(int), 204)]
         [ProducesResponseType(typeof(string), 400)]
         public ActionResult Delete(int id)
