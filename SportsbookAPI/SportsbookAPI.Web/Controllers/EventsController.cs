@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Internal;
 using SportsbookAPI.Web.Models;
 using SportsbookAPI.Web.Repository;
 
@@ -13,11 +15,14 @@ namespace SportsbookAPI.Web.Controllers
     public class EventsController : ControllerBase
     {
         private readonly EventsRepository _eventsRepository;
+        private readonly StadiumsRepository _stadiumsRepository;
 
-        public EventsController(EventsRepository eventsRepository)
+        public EventsController(EventsRepository eventsRepository, StadiumsRepository stadiumsRepository)
         {
             this._eventsRepository = eventsRepository;
+            _stadiumsRepository = stadiumsRepository;
         }
+
         /// <summary>
         /// Returns events in system
         /// </summary>
@@ -43,6 +48,12 @@ namespace SportsbookAPI.Web.Controllers
         [ProducesResponseType(typeof(string), 400)]
         public ActionResult Create(SportsbookEventCreation evt)
         {
+            var stadiums = _stadiumsRepository.GetStadiums();
+            if (!stadiums.Any(s => s.Id == evt.StadiumId))
+            {
+                return StatusCode(400, $"No stadium exists with ID {evt.StadiumId}.");
+            }
+            
             try
             {
                 var id = _eventsRepository.AddEvent(new SportsbookEvent(evt));

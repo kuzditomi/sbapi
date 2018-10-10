@@ -1,21 +1,19 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.EntityFrameworkCore;
 using SportsbookAPI.Web.Models;
 
 namespace SportsbookAPI.Web.Repository
 {
     public class EventsRepository
     {
-        private int idCounter;
-        private ICollection<SportsbookEvent> events;
+        private int _idCounter;
+        private readonly ICollection<SportsbookEvent> _events;
 
         public EventsRepository()
         {
-            this.idCounter = 1;
-            this.events = new List<SportsbookEvent>();
+            this._idCounter = 1;
+            this._events = new List<SportsbookEvent>();
 
             this.Init();
         }
@@ -33,31 +31,31 @@ namespace SportsbookAPI.Web.Repository
 
         public IEnumerable<SportsbookEvent> GetEvents()
         {
-            return events.ToList();
+            return _events.ToList();
         }
 
         public int AddEvent(SportsbookEvent e)
         {
-            if (events.Count > 10)
+            if (_events.Count > 10)
             {
                 throw new OperationCanceledException("Too much events");
             }
 
-            e.Id = idCounter++;
-            events.Add(e);
+            e.Id = _idCounter++;
+            _events.Add(e);
 
             return e.Id;
         }
 
         public void Delete(int id)
         {
-            var evt = events.SingleOrDefault(e => e.Id == id);
+            var evt = _events.SingleOrDefault(e => e.Id == id);
             if (evt == null)
             {
                 throw new OperationCanceledException();
             }
 
-            events.Remove(evt);
+            _events.Remove(evt);
         }
     }
 }
