@@ -49,8 +49,9 @@ namespace SportsbookAPI.Web
                 c.AddSecurityRequirement(security);
             });
 
+            services.AddCors();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-
+            
             services.AddAuthentication(x =>
             {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -83,7 +84,8 @@ namespace SportsbookAPI.Web
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            
+            app.UseCors(options => options.AllowAnyOrigin());
             app.UseMvc();
 
             app.UseSwagger();
