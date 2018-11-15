@@ -49,7 +49,10 @@ namespace SportsbookAPI.Web
                 c.AddSecurityRequirement(security);
             });
 
-            services.AddCors();
+            services.AddCors(options => options.AddPolicy("AllowAll", p => p.AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader()));
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             
             services.AddAuthentication(x =>
@@ -84,8 +87,8 @@ namespace SportsbookAPI.Web
             {
                 app.UseDeveloperExceptionPage();
             }
-            
-            app.UseCors(options => options.AllowAnyOrigin());
+
+            app.UseCors("AllowAll");
             app.UseMvc();
 
             app.UseSwagger();
